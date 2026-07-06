@@ -6,7 +6,7 @@ export default function useTasks() {
     const { tasks, setTasks } = useContext(GlobalContext);
 
     
-    const addTask = (newDetailedTask) => {
+    const addTask = (newTasktoAdd) => {
         const newTask = {
             id: Date.now(), 
             title: newDetailedTask.title,
