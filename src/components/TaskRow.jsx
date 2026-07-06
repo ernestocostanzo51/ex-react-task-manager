@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { memo } from "react";
  function TaskRow({ task }) {
     return (
@@ -5,7 +6,7 @@ import { memo } from "react";
             <th scope="row">{task.id}</th>
             <td>
                
-                <strong>{task.title}</strong>
+                <NavLink to={`/tasks/${task.id}`}><strong>{task.title}</strong></NavLink>
             </td>
             <td>
                
@@ -19,6 +20,7 @@ import { memo } from "react";
             <td>
                 {new Date(task.createdAt).toLocaleDateString('it-IT')}
             </td>
+
         </tr>
     );
     
