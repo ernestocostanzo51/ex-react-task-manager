@@ -6,16 +6,35 @@ export default function useTasks() {
     const { tasks, setTasks } = useContext(GlobalContext);
 
     
-    const addTask = (newTasktoAdd) => {
-        const newTask = {
-            id: Date.now(), 
-            title: newDetailedTask.title,
-            description: newDetailedTask.description || "",
-            status: "To do", 
-            createdAt: new Date().toISOString() 
-        };
-        setTasks([...tasks, newTask]); 
-    };
+   const addTask = async (taskData) => {
+        try {
+            const response = await fetch("/tasks", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    title: taskData.title,
+                    description: taskData.description,
+                    status: taskData.status
+                })
+            })
+
+            const data = await response.json()
+
+            if (data.success) {
+                
+                setTasks((prevTasks) => [...prevTasks, data.task])
+                return data
+            } else {
+                
+                throw new Error(data.message)
+            }
+        } catch (error) {
+            
+            throw error
+        }
+    }
 
   
     const removeTask = (id) => {

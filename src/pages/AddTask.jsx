@@ -1,11 +1,14 @@
 import { useState, useRef } from "react"
+import useTasks from "../context/useTasks"
 
 export default function AddTask() {
+    const { addTask } = useTasks()
+
     const [taskName, setTaskName] = useState("")
     const taskStatus = useRef(null)
     const taskDesc = useRef(null)
 
-    const status = ["To do", "Doing", "Done"]
+    const statusList = ["To do", "Doing", "Done"]
     const symbols = "!@#$%^&*()-_=+[]{}|;:'\\,.<>?/`~"
 
     const validitàNomeTask = (nome) => {
@@ -18,20 +21,30 @@ export default function AddTask() {
 
     const isNomeValido = validitàNomeTask(taskName)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         if (!isNomeValido) return
 
+        
         const nuovaTask = {
-            nome: taskName,
-            stato: taskStatus.current?.value || "",
-            descrizione: taskDesc.current?.value || ""
+            title: taskName,
+            status: taskStatus.current?.value || "",
+            description: taskDesc.current?.value || ""
         }
-        console.log(nuovaTask)
 
-        setTaskName("")
-        if (taskStatus.current) taskStatus.current.value = ""
-        if (taskDesc.current) taskDesc.current.value = ""
+        try {
+          
+            await addTask(nuovaTask)
+
+          
+            alert("Task creata con successo!")
+            
+            setTaskName("")
+            if (taskStatus.current) taskStatus.current.value = ""
+            if (taskDesc.current) taskDesc.current.value = ""
+        } catch (error) {
+            alert(error.message)
+        }
     }
 
     return (
@@ -61,7 +74,7 @@ export default function AddTask() {
                         <select className="form-select" ref={taskStatus}>
                             <option value="">seleziona</option>
                             {
-                                status.map((task, index) => (
+                                statusList.map((task, index) => (
                                     <option key={index} value={task}>{task}</option>
                                 ))
                             }
