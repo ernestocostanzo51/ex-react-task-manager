@@ -6,7 +6,7 @@ import { memo } from "react";
             <th scope="row">{task.id}</th>
             <td>
                
-                <NavLink to={`/tasks/${task.id}`}><strong>{task.title}</strong></NavLink>
+                <NavLink to={`/tasks/${task.id}`} style={{  textDecoration: 'none' }}><strong>{task.title}</strong></NavLink>
             </td>
             <td>
                

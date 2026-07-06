@@ -37,10 +37,27 @@ export default function useTasks() {
     }
 
   
-    const removeTask = (id) => {
-        const remainingTasks = tasks.filter(task => task.id !== id);
-        setTasks(remainingTasks);
-    };
+    const removeTask = async (id) => {
+  if (!id) {
+    throw new Error("ID della task mancante o non valido.");
+  }
+  try {
+    const response = await fetch(`http://localhost:3001/tasks/${id}`, {
+      method: 'DELETE'
+    });
+    if (response.ok) {
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id != id));
+      return { success: true };
+    } else {
+      throw new Error("Task non trovato o errore sul server.");
+    }
+
+  } catch (error) {
+    console.error("Errore rilevato nel frontend:", error.message);
+    
+    throw error;
+  }
+};
 
     
     const updateTask = (id, newStatus) => {
