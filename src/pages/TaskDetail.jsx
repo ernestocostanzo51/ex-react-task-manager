@@ -13,6 +13,8 @@ function TaskDetail() {
 
   const { removeTask } = useTasks();
 
+  const Navigate = useNavigate()
+
   
   const currentTask = tasks ? tasks.find(task => task.id == id) : null;
 
@@ -27,7 +29,7 @@ function TaskDetail() {
         await removeTask(Number(id));
         
         alert("Task eliminata con successo!");
-        navigate('/'); 
+        Navigate('/'); 
         
       } catch (error) {
         alert(error.message);
@@ -52,7 +54,7 @@ function TaskDetail() {
       <div className="container mt-4">
         <div className="alert alert-warning role=alert">
           <h4 className="alert-heading">⚠️ Task non trovata</h4>
-          <p>La task richiesta con ID <strong>{id}</strong> non esiste nel database.</p>
+          <p>La task richiesta non esiste nel database.</p>
           <hr />
           <Link to="/" className="btn btn-outline-warning btn-sm">
             Torna alla lista delle task

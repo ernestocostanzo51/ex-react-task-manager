@@ -3,9 +3,8 @@ import { memo } from "react";
  function TaskRow({ task }) {
     return (
         <tr>
-            <th scope="row">{task.id}</th>
+           
             <td>
-               
                 <NavLink to={`/tasks/${task.id}`} style={{  textDecoration: 'none' }}><strong>{task.title}</strong></NavLink>
             </td>
             <td>

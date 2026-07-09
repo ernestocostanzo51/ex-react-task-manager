@@ -18,7 +18,6 @@ export default function TaskList() {
                 <table className="table table-striped table-hover align-middle">
                     <thead>
                         <tr>
-                            <th scope="col">#</th> 
                             <th scope="col">Nome</th>
                             <th scope="col">Stato</th>
                             <th scope="col">Data Creazione</th>
@@ -26,10 +25,15 @@ export default function TaskList() {
                     </thead>
                     <tbody>
                         {
-                            tasks.map(task => (
+                            tasks.length === 0 ?  <h1>Tasks non dispodibili</h1> : (
+                                tasks.map(task => (
                                 <TaskRow key={task.id} task={task} />
                             ))
+                            )
                         }
+                    
+                            
+                        
                     </tbody>
                 </table>
             </div>

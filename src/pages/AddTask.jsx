@@ -1,5 +1,6 @@
 import { useState, useRef } from "react"
 import useTasks from "../context/useTasks"
+import { useMemo } from "react"
 
 export default function AddTask() {
     const { addTask } = useTasks()
@@ -63,10 +64,16 @@ export default function AddTask() {
                             onChange={(e) => setTaskName(e.target.value)}
                         />
                         {taskName.trim() !== "" && (
+                            
                             <span style={{ color: isNomeValido ? "green" : "red", display: "block", marginTop: "5px" }}>
-                                {isNomeValido ? "Nome valido ✓" : "Nome non valido (contiene simboli) ✗"}
+                                {isNomeValido ? "Nome valido " : "Nome non valido (contiene simboli) "}
+                               
                             </span>
+                            
                         )}
+                        {!taskName.trim() &&
+                         <span style={{color:"red", marginTop: "5px", display:"block"}}>Bisogna inserire il nome della task</span> }
+                         
                     </div>
                     
                     <div className="col-6 mb-3">
