@@ -1,1 +1,83 @@
-@import url('bootstrap')
+@import url('bootstrap');
+
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(4px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; 
+  animation: fadeIn 0.2s ease-out;
+}
+
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: scaleUp 0.2s ease-out;
+}
+
+
+.modal-title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #212529;
+  font-weight: 600;
+}
+
+
+.modal-body {
+  color: #495057;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem; /* Spazio tra i pulsanti */
+}
+
+
+.modal-footer button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+
+.btn-cancel {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.btn-cancel:hover {
+  background-color: #dee2e6;
+}
+
+
+.btn-confirm {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.btn-confirm:hover {
+  background-color: #bb2d3b;
+}
+
