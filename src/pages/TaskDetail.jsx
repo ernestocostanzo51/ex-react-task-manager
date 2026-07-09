@@ -1,32 +1,56 @@
 import React, { useContext, useState } from 'react';
 import { useParams, Link, NavLink, useNavigate } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalContext';
-import useTasks from '../context/useTasks';
+import useTasks from '../context/useTasks'; // Hook personalizzato
 import Modal from '../components/Modal';
+import EditTaskModal from '../components/EditTaskModal'; // Importiamo la modale di modifica
 
 function TaskDetail() {
   const { id } = useParams(); 
-  const [showModal, setShowModal] = useState(false);
   
+  // Stati per controllare la visibilità delle due modali
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+ 
   const { tasks } = useContext(GlobalContext);
-  const { removeTask } = useTasks();
-  const navigate = useNavigate(); 
+  
+  // Estraiamo sia removeTask che updateTask dal tuo custom hook useTasks
+  const { removeTask, updateTask } = useTasks();
 
+  const navigate = useNavigate();
+
+  // Cerchiamo la task corrente all'interno dello stato globale
   const currentTask = tasks ? tasks.find(task => task.id == id) : null;
 
+  // --- GESTIONE ELIMINAZIONE ---
   const handleRemoveClick = async () => {
-   
     try {
       await removeTask(Number(id));
-      setShowModal(false); 
+      setShowDeleteModal(false);
       alert("Task eliminata con successo!");
       navigate('/'); 
     } catch (error) {
       alert(error.message);
     }
   };
+
+  // --- GESTIONE SALVATAGGIO MODIFICA ---
+  const handleSaveTask = async (updatedTask) => {
+    try {
+      // Eseguiamo la funzione del tuo hook passando l'oggetto modificato
+      await updateTask(updatedTask);
+      
+      // Se l'operazione ha successo:
+      alert("Task modificata con successo!"); // 1. Mostra alert di conferma
+      setShowEditModal(false);                 // 2. Chiude la modale
+      
+    } catch (error) {
+      // Se la funzione lancia un errore, mostra l'alert con il messaggio ricevuto
+      alert(`Errore: ${error.message}`);
+    }
+  };
   
-  
+  // Stato di caricamento iniziale
   if (!tasks || tasks.length === 0) {
     return (
       <div className="container mt-4 text-center">
@@ -38,11 +62,11 @@ function TaskDetail() {
     );
   }
 
-  
+  // Se la task non esiste nel database
   if (!currentTask) {
     return (
       <div className="container mt-4">
-        <div className="alert alert-warning" role="alert"> 
+        <div className="alert alert-warning" role="alert">
           <h4 className="alert-heading">⚠️ Task non trovata</h4>
           <p>La task richiesta non esiste nel database.</p>
           <hr />
@@ -92,13 +116,17 @@ function TaskDetail() {
               </p>
             </div>
             
-            <div className="card-footer bg-light d-flex justify-content-between">
+            <div className="card-footer bg-light d-flex justify-content-between gap-2">
               <NavLink to="/" className="btn btn-secondary btn-sm">
                 ← Torna alla lista
               </NavLink>
+
+              {/* NUOVO BOTTONE: "Modifica Task" */}
+              <button className="btn btn-warning btn-sm text-white" onClick={() => setShowEditModal(true)}>
+                Modifica Task
+              </button>
               
-            
-              <button className='btn btn-danger btn-sm' onClick={() => setShowModal(true)}>
+              <button className='btn btn-danger btn-sm' onClick={() => setShowDeleteModal(true)}>
                 Elimina task
               </button>
             </div>
@@ -107,14 +135,22 @@ function TaskDetail() {
         </div>
       </div>
 
-     
+      {/* MODALE DI CONFERMA ELIMINAZIONE */}
       <Modal
         title="Conferma eliminazione"
         content={<p>Sicuro di voler eliminare la task selezionata?</p>}
-        show={showModal}
-        onClose={() => setShowModal(false)}
+        show={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
         onConfirm={handleRemoveClick}
         confirmText='Elimina'
+      />
+
+      {/* COMPONENTE INTEGRATO: MODALE DI MODIFICA TASK */}
+      <EditTaskModal 
+        show={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        task={currentTask}        // Passa l'oggetto della task corrente per precompilare il form
+        onSave={handleSaveTask}   // Passa la funzione di gestione del salvataggio
       />
     </div>
   );

@@ -60,12 +60,44 @@ export default function useTasks() {
 };
 
     
-    const updateTask = (id, newStatus) => {
-        const updatedTasks = tasks.map(task => 
-            task.id === id ? { ...task, status: newStatus } : task
+ 
+const updateTask = async (updatedTask) => {
+    try {
+     
+      const { id, ...dataToSend } = updatedTask;
+
+     
+      const response = await fetch(`http://localhost:3001/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend), 
+      });
+
+     
+
+      const data = await response.json();
+
+     
+      if (data.success) {
+        
+     
+        setTasks((prevTasks) =>
+          prevTasks.map((task) => (task.id === id ? data.task : task))
         );
-        setTasks(updatedTasks);
-    };
+        return data.task; 
+        
+      } else {
+        
+        throw new Error(data.message || "Errore durante l'aggiornamento della task.");
+      }
+
+    } catch (error) {
+      console.error("Errore dentro useTasks (updateTask):", error);
+      throw error; 
+    }
+  };
 
     
     return {
