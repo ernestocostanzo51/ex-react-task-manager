@@ -66,7 +66,6 @@ const updateTask = async (updatedTask) => {
      
       const { id, ...dataToSend } = updatedTask;
 
-     
       const response = await fetch(`http://localhost:3001/tasks/${id}`, {
         method: 'PUT',
         headers: {
@@ -75,14 +74,11 @@ const updateTask = async (updatedTask) => {
         body: JSON.stringify(dataToSend), 
       });
 
-     
-
+    
       const data = await response.json();
 
-     
       if (data.success) {
         
-     
         setTasks((prevTasks) =>
           prevTasks.map((task) => (task.id === id ? data.task : task))
         );
@@ -99,7 +95,6 @@ const updateTask = async (updatedTask) => {
     }
   };
 
-    
     return {
         tasks,
         addTask,
